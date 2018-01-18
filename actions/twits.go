@@ -88,19 +88,25 @@ func (v TwitsResource) New(c buffalo.Context) error {
 // Create adds a Twit to the DB. This function is mapped to the
 // path POST /twits
 func (v TwitsResource) Create(c buffalo.Context) error {
+    // Get the DB connection from the context
+    tx, ok := c.Value("tx").(*pop.Connection)
+    if !ok {
+        return errors.WithStack(errors.New("no transaction found"))
+    }
+
+    user := c.Value("current_user").(*models.User)
+
     // Allocate an empty Twit
-    twit := &models.Twit{}
+    twit := &models.Twit{
+        UserID: user.ID,
+    }
+
 
     // Bind twit to the html form elements
     if err := c.Bind(twit); err != nil {
         return errors.WithStack(err)
     }
 
-    // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
-    if !ok {
-        return errors.WithStack(errors.New("no transaction found"))
-    }
 
     // Validate the data from the html form
     verrs, err := tx.ValidateAndCreate(twit)

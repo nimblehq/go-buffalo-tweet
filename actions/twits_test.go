@@ -1,29 +1,22 @@
 package actions
 
+import (
+    "github.com/bufftwitt/models"
+    "github.com/markbates/pop/nulls"
+)
+
 func (as *ActionSuite) Test_TwitsResource_List() {
-    as.Fail("Not Implemented!")
-}
+    user := &models.User{
+        Name: "Trung",
+        Email: nulls.NewString("test@test.com"),
+        Provider: "test",
+        ProviderID: "123",
 
-func (as *ActionSuite) Test_TwitsResource_Show() {
-    as.Fail("Not Implemented!")
-}
+    }
+    as.NoError(as.DB.Create(user))
 
-func (as *ActionSuite) Test_TwitsResource_New() {
-    as.Fail("Not Implemented!")
-}
+    as.Session.Set("current_user_id", user.ID)
 
-func (as *ActionSuite) Test_TwitsResource_Create() {
-    as.Fail("Not Implemented!")
-}
-
-func (as *ActionSuite) Test_TwitsResource_Edit() {
-    as.Fail("Not Implemented!")
-}
-
-func (as *ActionSuite) Test_TwitsResource_Update() {
-    as.Fail("Not Implemented!")
-}
-
-func (as *ActionSuite) Test_TwitsResource_Destroy() {
-    as.Fail("Not Implemented!")
+    res := as.HTML("/twits").Get()
+    as.Equal(200, res.Code)
 }
