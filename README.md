@@ -6,6 +6,7 @@ Clone the repository
 
 Require dependency and Go plugins:
 * [dep](https://github.com/golang/dep)
+* [Goth] (https://github.com/markbates/goth)
 * Postgres
 * Node/Yarn
 * [Buffalo](https://github.com/gobuffalo/buffalo) - v0.9.5 (or later or `development` branch)
