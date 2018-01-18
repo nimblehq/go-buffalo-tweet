@@ -1,8 +1,0 @@
-<div class="page-header">
-  <h1>Edit Twit</h1>
-</div>
-
-<%= form_for(twit, {action: twitPath({ twit_id: twit.ID }), method: "PUT"}) { %>
-  <%= partial("twits/form.html") %>
-  <a href="<%= twitPath({ twit_id: twit.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
-<% } %>
