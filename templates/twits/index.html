@@ -7,15 +7,15 @@
 
 <table class="table table-striped">
   <thead>
-  <th>UserID</th>
-    <th>Message</th>
-    <th>&nbsp;</th>
+  <th>Message</th>
+  <th>Created At</th>
+  <th>&nbsp;</th>
   </thead>
   <tbody>
     <%= for (twit) in twits { %>
       <tr>
-      <td><%= twit.UserID %></td>
-        <td><%= twit.Message %></td>
+      <td><%= twit.Message %></td>
+        <td><%= twit.CreatedAt %></td>
         <td>
           <div class="pull-right">
             <a href="<%= twitPath({ twit_id: twit.ID }) %>" class="btn btn-info">View</a>
