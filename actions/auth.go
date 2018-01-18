@@ -54,7 +54,7 @@ func AuthCallback(c buffalo.Context) error {
     }
 
     c.Flash().Add("success", "You have been logged in")
-    return c.Redirect(302, "/twits")
+    return c.Redirect(302, "/tweets")
 }
 
 func AuthDestroy(c buffalo.Context) error {

@@ -46,10 +46,10 @@ CREATE TABLE schema_migration (
 ALTER TABLE schema_migration OWNER TO postgres;
 
 --
--- Name: twits; Type: TABLE; Schema: public; Owner: postgres
+-- Name: tweets; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE twits (
+CREATE TABLE tweets (
     id uuid NOT NULL,
     user_id uuid NOT NULL,
     message character varying(255) NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE twits (
 );
 
 
-ALTER TABLE twits OWNER TO postgres;
+ALTER TABLE tweets OWNER TO postgres;
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
@@ -78,11 +78,11 @@ CREATE TABLE users (
 ALTER TABLE users OWNER TO postgres;
 
 --
--- Name: twits twits_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tweets tweets_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY twits
-    ADD CONSTRAINT twits_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY tweets
+    ADD CONSTRAINT tweets_pkey PRIMARY KEY (id);
 
 
 --

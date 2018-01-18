@@ -10,7 +10,7 @@ import (
 	"github.com/satori/go.uuid"
 )
 
-type Twit struct {
+type Tweet struct {
 	ID        uuid.UUID `json:"id" db:"id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
@@ -19,23 +19,23 @@ type Twit struct {
 }
 
 // String is not required by pop and may be deleted
-func (t Twit) String() string {
+func (t Tweet) String() string {
 	jt, _ := json.Marshal(t)
 	return string(jt)
 }
 
-// Twits is not required by pop and may be deleted
-type Twits []Twit
+// Tweets is not required by pop and may be deleted
+type Tweets []Tweet
 
 // String is not required by pop and may be deleted
-func (t Twits) String() string {
+func (t Tweets) String() string {
 	jt, _ := json.Marshal(t)
 	return string(jt)
 }
 
 // Validate gets run every time you call a "pop.Validate*" (pop.ValidateAndSave, pop.ValidateAndCreate, pop.ValidateAndUpdate) method.
 // This method is not required and may be deleted.
-func (t *Twit) Validate(tx *pop.Connection) (*validate.Errors, error) {
+func (t *Tweet) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.Validate(
 		&validators.StringIsPresent{Field: t.Message, Name: "Message"},
 	), nil
@@ -43,12 +43,12 @@ func (t *Twit) Validate(tx *pop.Connection) (*validate.Errors, error) {
 
 // ValidateCreate gets run every time you call "pop.ValidateAndCreate" method.
 // This method is not required and may be deleted.
-func (t *Twit) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) {
+func (t *Tweet) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
 }
 
 // ValidateUpdate gets run every time you call "pop.ValidateAndUpdate" method.
 // This method is not required and may be deleted.
-func (t *Twit) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
+func (t *Tweet) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
 }

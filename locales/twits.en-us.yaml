@@ -1,6 +1,0 @@
-- id: "twit.created.success"
-  translation: "Twit was successfully created."
-- id: "twit.updated.success"
-  translation: "Twit was successfully updated."
-- id: "twit.destroyed.success"
-  translation: "Twit was successfully destroyed."
