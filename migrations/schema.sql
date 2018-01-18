@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 9.6.2
--- Dumped by pg_dump version 9.6.2
+-- Dumped by pg_dump version 10.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -46,6 +46,21 @@ CREATE TABLE schema_migration (
 ALTER TABLE schema_migration OWNER TO postgres;
 
 --
+-- Name: twits; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE twits (
+    id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    message character varying(255) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE twits OWNER TO postgres;
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -61,6 +76,14 @@ CREATE TABLE users (
 
 
 ALTER TABLE users OWNER TO postgres;
+
+--
+-- Name: twits twits_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY twits
+    ADD CONSTRAINT twits_pkey PRIMARY KEY (id);
+
 
 --
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres

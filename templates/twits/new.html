@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>New Twit</h1>
+</div>
+
+<%= form_for(twit, {action: twitsPath(), method: "POST"}) { %>
+  <%= partial("twits/form.html") %>
+  <a href="<%= twitsPath() %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>
