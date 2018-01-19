@@ -24,11 +24,17 @@ type TweetsResource struct {
 	buffalo.Resource
 }
 
+func (v TweetsResource) scope(c buffalo.Context) *pop.Query {
+    tx, _ := c.Value("tx").(*pop.Connection)
+    currentUserId := c.Session().Get("current_user_id")
+    return tx.Where("user_id = ?", currentUserId)
+}
+
 // List gets all Tweets. This function is mapped to the path
 // GET /tweets
 func (v TweetsResource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
+	_, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
@@ -37,7 +43,7 @@ func (v TweetsResource) List(c buffalo.Context) error {
 
 	// Paginate results. Params "page" and "per_page" control pagination.
 	// Default values are "page=1" and "per_page=20".
-	q := tx.PaginateFromParams(c.Params())
+	q := v.scope(c).PaginateFromParams(c.Params())
 
 	// Retrieve all Tweets from the DB
 	if err := q.All(tweets); err != nil {
@@ -96,14 +102,15 @@ func (v TweetsResource) Create(c buffalo.Context) error {
 	currentUser := c.Value("current_user").(*models.User)
 
 	// Allocate an empty Tweet
-	tweet := &models.Tweet{
-		UserID: currentUser.ID,
-	}
+	tweet := &models.Tweet{ }
 
 	// Bind tweet to the html form elements
 	if err := c.Bind(tweet); err != nil {
 		return errors.WithStack(err)
 	}
+
+	// Don't call in Tweet creation, it should be behind the Bind
+	tweet.UserID = currentUser.ID
 
 	// Get the DB connection from the context
 

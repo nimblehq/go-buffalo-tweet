@@ -29,3 +29,16 @@ func (as *ActionSuite) Login() *models.User {
     as.Session.Set("current_user_id", user.ID)
     return user
 }
+
+func (as *ActionSuite) CreateTweet(user *models.User) *models.Tweet {
+    tweet := &models.Tweet{
+        Message: "Hello world!",
+        UserID: user.ID,
+    }
+
+    res, err := as.DB.ValidateAndCreate(tweet)
+    as.NoError(err)
+    as.False(res.HasAny())
+
+    return tweet
+}
