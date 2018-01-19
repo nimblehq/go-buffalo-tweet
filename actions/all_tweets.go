@@ -50,5 +50,5 @@ func (v AllTweetsResource) List(c buffalo.Context) error {
     // Add the paginator to the context so it can be used in the template.
     c.Set("pagination", q.Paginator)
 
-    return c.Render(200, r.HTML("list_all.html"))
+    return c.Render(200, r.HTML("tweets/list_all.html"))
 }
