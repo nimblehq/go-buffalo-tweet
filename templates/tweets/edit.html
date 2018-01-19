@@ -4,5 +4,5 @@
 
 <%= form_for(tweet, {action: tweetPath({ tweet_id: tweet.ID }), method: "PUT"}) { %>
   <%= partial("tweets/form.html") %>
-  <a href="<%= tweetPath({ tweet_id: tweet.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+  <a href="<%= tweetPath({ tweet_id: tweet.ID }) %>" class="btn btn-warning">Cancel</a>
 <% } %>
