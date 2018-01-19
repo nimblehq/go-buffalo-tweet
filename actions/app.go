@@ -57,11 +57,12 @@ func App() *buffalo.App {
         app.Use(T.Middleware())
 
         app.GET("/", HomeHandler)
-
+        app.GET("/credit", CreditHandler)
         app.ServeFiles("/assets", assetsBox)
         app.Use(SetCurrentUser)
         app.Use(Authorize)
         app.Middleware.Skip(Authorize, HomeHandler)
+        app.Middleware.Skip(Authorize, CreditHandler)
         auth := app.Group("/auth")
         bah := buffalo.WrapHandlerFunc(gothic.BeginAuthHandler)
         auth.GET("/{provider}", bah)
@@ -69,6 +70,7 @@ func App() *buffalo.App {
         auth.DELETE("", AuthDestroy)
         auth.Middleware.Skip(Authorize, bah, AuthCallback)
         app.Resource("/tweets", TweetsResource{})
+        app.Resource("/all_tweets", AllTweetsResource{})
     }
 
     return app
