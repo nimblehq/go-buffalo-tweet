@@ -4,6 +4,8 @@ import (
     "testing"
 
     "github.com/gobuffalo/suite"
+    "github.com/bufftwitt/models"
+    "github.com/markbates/pop/nulls"
 )
 
 type ActionSuite struct {
@@ -13,4 +15,17 @@ type ActionSuite struct {
 func Test_ActionSuite(t *testing.T) {
     as := &ActionSuite{suite.NewAction(App())}
     suite.Run(t, as)
+}
+
+func (as *ActionSuite) Login() *models.User {
+    user := &models.User {
+        Name: "Trung",
+        Email: nulls.NewString("hello@nimbl3.com"),
+        Provider: "something",
+        ProviderID: "123",
+    }
+
+    as.NoError(as.DB.Create(user))
+    as.Session.Set("current_user_id", user.ID)
+    return user
 }

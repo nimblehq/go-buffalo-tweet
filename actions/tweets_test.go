@@ -1,21 +1,17 @@
 package actions
 
-import (
-	"github.com/bufftwitt/models"
-	"github.com/markbates/pop/nulls"
-)
+import "github.com/bufftwitt/models"
 
 func (as *ActionSuite) Test_TweetsResource_List() {
-	user := &models.User{
-		Name:       "Trung",
-		Email:      nulls.NewString("test@test.com"),
-		Provider:   "test",
-		ProviderID: "123",
-	}
-	as.NoError(as.DB.Create(user))
+	user := as.Login()
 
-	as.Session.Set("current_user_id", user.ID)
+	tweet := &models.Tweet{
+		UserID: user.ID,
+		Message: "Hello world!!",
+	}
+	as.NoError(as.DB.Create(tweet))
 
 	res := as.HTML("/tweets").Get()
 	as.Equal(200, res.Code)
+	as.Contains(res.Body.String(), tweet.Message)
 }
