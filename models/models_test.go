@@ -1,16 +1,16 @@
 package models_test
 
 import (
-	"testing"
+    "testing"
 
-	"github.com/gobuffalo/suite"
+    "github.com/gobuffalo/suite"
 )
 
 type ModelSuite struct {
-	*suite.Model
+    *suite.Model
 }
 
 func Test_ModelSuite(t *testing.T) {
-	as := &ModelSuite{suite.NewModel()}
-	suite.Run(t, as)
+    as := &ModelSuite{suite.NewModel()}
+    suite.Run(t, as)
 }
