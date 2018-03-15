@@ -3,8 +3,8 @@ package actions
 import (
     "testing"
 
-    "github.com/gobuffalo/suite"
     "github.com/bufftwitt/models"
+    "github.com/gobuffalo/suite"
     "github.com/markbates/pop/nulls"
 )
 
@@ -18,10 +18,10 @@ func Test_ActionSuite(t *testing.T) {
 }
 
 func (as *ActionSuite) Login() *models.User {
-    user := &models.User {
-        Name: "Trung",
-        Email: nulls.NewString("hello@nimbl3.com"),
-        Provider: "something",
+    user := &models.User{
+        Name:       "Trung",
+        Email:      nulls.NewString("hello@nimbl3.com"),
+        Provider:   "something",
         ProviderID: "123",
     }
 
@@ -33,7 +33,7 @@ func (as *ActionSuite) Login() *models.User {
 func (as *ActionSuite) CreateTweet(user *models.User) *models.Tweet {
     tweet := &models.Tweet{
         Message: "Hello world!",
-        UserID: user.ID,
+        UserID:  user.ID,
     }
 
     res, err := as.DB.ValidateAndCreate(tweet)

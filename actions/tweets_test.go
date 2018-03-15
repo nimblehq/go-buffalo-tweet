@@ -6,17 +6,17 @@ import (
 )
 
 func (as *ActionSuite) Test_TweetsResource_List() {
-	user := as.Login()
+    user := as.Login()
 
-	tweet := &models.Tweet{
-		UserID: user.ID,
-		Message: "Hello world!!",
-	}
-	as.NoError(as.DB.Create(tweet))
+    tweet := &models.Tweet{
+        UserID:  user.ID,
+        Message: "Hello world!!",
+    }
+    as.NoError(as.DB.Create(tweet))
 
-	res := as.HTML("/tweets").Get()
-	as.Equal(200, res.Code)
-	as.Contains(res.Body.String(), tweet.Message)
+    res := as.HTML("/tweets").Get()
+    as.Equal(200, res.Code)
+    as.Contains(res.Body.String(), tweet.Message)
 }
 
 func (as *ActionSuite) Test_TweetsResource_Show() {
@@ -28,13 +28,12 @@ func (as *ActionSuite) Test_TweetsResource_Show() {
     as.Contains(result.Body.String(), tweet.Message)
 }
 
-
 func (as *ActionSuite) Test_TweetsResource_NotShow_FromOtherUser() {
     anotherUser := &models.User{
-        Name: "New user",
-        Provider: "some",
+        Name:       "New user",
+        Provider:   "some",
         ProviderID: "129",
-        Email: nulls.NewString("new_user@test.com"),
+        Email:      nulls.NewString("new_user@test.com"),
     }
     tweet := as.CreateTweet(anotherUser)
 

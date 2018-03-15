@@ -1,10 +1,11 @@
 package validators
 
 import (
-    "github.com/markbates/validate"
-    "strings"
-    "github.com/markbates/validate/validators"
     "fmt"
+    "strings"
+
+    "github.com/markbates/validate"
+    "github.com/markbates/validate/validators"
 )
 
 type WordCensorship struct {

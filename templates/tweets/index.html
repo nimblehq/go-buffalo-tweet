@@ -19,7 +19,7 @@
         <td>
           <div class="pull-right">
             <a href="<%= tweetPath({ tweet_id: tweet.ID }) %>" class="btn btn-primary">View</a>
-            <a href="<%= editTweetPath({ tweet_id: tweet.ID }) %>" class="btn btn-primary">Edit</a>
+            <a href="<%= editTweetPath({ tweet_id: tweet.ID }) %>" class="btn btn-warning">Edit</a>
             <a href="<%= tweetPath({ tweet_id: tweet.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
           </div>
         </td>

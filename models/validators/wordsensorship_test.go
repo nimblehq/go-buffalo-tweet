@@ -2,6 +2,7 @@ package validators
 
 import (
     "testing"
+
     "github.com/gobuffalo/suite"
     "github.com/markbates/validate"
 )
@@ -13,7 +14,7 @@ type ModelSuite struct {
 // TODO: fix this
 func (ms *ModelSuite) Test_WordCensorship_Validator(t *testing.T) {
     censor := WordCensorship{
-        Name: "name",
+        Name:  "name",
         Field: "fuck",
     }
     errs := validate.NewErrors()

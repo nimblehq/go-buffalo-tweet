@@ -57,7 +57,6 @@ func App() *buffalo.App {
         app.Use(T.Middleware())
 
         app.GET("/", HomeHandler)
-
         app.ServeFiles("/assets", assetsBox)
         app.Use(SetCurrentUser)
         app.Use(Authorize)
@@ -69,6 +68,9 @@ func App() *buffalo.App {
         auth.DELETE("", AuthDestroy)
         auth.Middleware.Skip(Authorize, bah, AuthCallback)
         app.Resource("/tweets", TweetsResource{})
+        app.Resource("/all_tweets", AllTweetsResource{})
+
+        app.Resource("/likes", LikesResource{})
     }
 
     return app

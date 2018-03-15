@@ -1,0 +1,6 @@
+- id: "like.created.success"
+  translation: "Like was successfully created."
+- id: "like.updated.success"
+  translation: "Like was successfully updated."
+- id: "like.destroyed.success"
+  translation: "Like was successfully destroyed."
