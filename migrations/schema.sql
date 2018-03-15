@@ -35,6 +35,21 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: likes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE likes (
+    id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    tweet_id uuid NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE likes OWNER TO postgres;
+
+--
 -- Name: schema_migration; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -76,6 +91,14 @@ CREATE TABLE users (
 
 
 ALTER TABLE users OWNER TO postgres;
+
+--
+-- Name: likes likes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY likes
+    ADD CONSTRAINT likes_pkey PRIMARY KEY (id);
+
 
 --
 -- Name: tweets tweets_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres

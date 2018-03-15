@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>Edit Like</h1>
+</div>
+
+<%= form_for(like, {action: likePath({ like_id: like.ID }), method: "PUT"}) { %>
+  <%= partial("likes/form.html") %>
+  <a href="<%= likePath({ like_id: like.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>

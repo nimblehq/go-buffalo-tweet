@@ -25,9 +25,9 @@ type TweetsResource struct {
 }
 
 func (v TweetsResource) scope(c buffalo.Context) *pop.Query {
-    tx, _ := c.Value("tx").(*pop.Connection)
-    currentUserId := c.Session().Get("current_user_id")
-    return tx.Where("user_id = ?", currentUserId)
+	tx, _ := c.Value("tx").(*pop.Connection)
+	currentUserId := c.Session().Get("current_user_id")
+	return tx.Where("user_id = ?", currentUserId)
 }
 
 // List gets all Tweets. This function is mapped to the path
@@ -102,7 +102,7 @@ func (v TweetsResource) Create(c buffalo.Context) error {
 	currentUser := c.Value("current_user").(*models.User)
 
 	// Allocate an empty Tweet
-	tweet := &models.Tweet{ }
+	tweet := &models.Tweet{}
 
 	// Bind tweet to the html form elements
 	if err := c.Bind(tweet); err != nil {
@@ -113,7 +113,6 @@ func (v TweetsResource) Create(c buffalo.Context) error {
 	tweet.UserID = currentUser.ID
 
 	// Get the DB connection from the context
-
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(tweet)

@@ -1,0 +1,33 @@
+<div class="page-header">
+  <h1>Likes</h1>
+</div>
+<ul class="list-unstyled list-inline">
+  <li><a href="<%= newLikesPath() %>" class="btn btn-primary">Create New Like</a></li>
+</ul>
+
+<table class="table table-striped">
+  <thead>
+  <th>UserID</th>
+    <th>TweetID</th>
+    <th>&nbsp;</th>
+  </thead>
+  <tbody>
+    <%= for (like) in likes { %>
+      <tr>
+      <td><%= like.UserID %></td>
+        <td><%= like.TweetID %></td>
+        <td>
+          <div class="pull-right">
+            <a href="<%= likePath({ like_id: like.ID }) %>" class="btn btn-info">View</a>
+            <a href="<%= editLikePath({ like_id: like.ID }) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= likePath({ like_id: like.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+          </div>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+
+<div class="text-center">
+  <%= paginator(pagination) %>
+</div>
