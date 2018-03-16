@@ -17,6 +17,8 @@ type Tweet struct {
     UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
     UserID    uuid.UUID `json:"user_id" db:"user_id"`
     Message   string    `json:"message" db:"message"`
+    Author    string    `json:"-" db:"author_name" form:"-" select:"(select name from users where id = tweets.user_id) as author_name" rw:"r"`
+    LikeCount int       `json:"-" db:"like_count" form:"-" select:"(select count(*) from likes where tweet_id = tweets.id) as like_count" rw:"r"`
 }
 
 // String is not required by pop and may be deleted

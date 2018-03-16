@@ -17,6 +17,7 @@ type User struct {
     UpdatedAt  time.Time    `json:"updated_at" db:"updated_at"`
     Name       string       `json:"name" db:"name"`
     Email      nulls.String `json:"email" db:"email"`
+    Tweets     Tweets       `json:"-" db:"-"`
     Provider   string       `json:"provider" db:"provider"`
     ProviderID string       `json:"provider_id" db:"provider_id"`
 }

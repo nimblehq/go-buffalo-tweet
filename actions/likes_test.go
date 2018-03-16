@@ -1,7 +1,5 @@
 package actions
 
-/*
-
 func (as *ActionSuite) Test_LikesResource_List() {
     as.Fail("Not Implemented!")
 }
@@ -29,4 +27,3 @@ func (as *ActionSuite) Test_LikesResource_Update() {
 func (as *ActionSuite) Test_LikesResource_Destroy() {
     as.Fail("Not Implemented!")
 }
-*/

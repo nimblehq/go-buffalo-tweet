@@ -8,14 +8,18 @@
 <table class="table table-striped">
   <thead>
   <th>Message</th>
+  <th>Author </th>
   <th>Created At&nbsp;</th>
+  <th>Likes</th>
   <th> </th>
   </thead>
   <tbody>
   <%= for (tweet) in tweets { %>
   <tr>
     <td><%= tweet.Message %></td>
+    <td><%= tweet.Author %></td>
     <td><%= tweet.CreatedAt %></td>
+    <td><%= tweet.LikeCount %></td>
     <td>
       <div class="pull-right">
         <a href="<%= tweetPath({ tweet_id: tweet.ID }) %>" class="btn btn-primary">Like</a>

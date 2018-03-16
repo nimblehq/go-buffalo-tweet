@@ -69,8 +69,6 @@ func App() *buffalo.App {
         auth.Middleware.Skip(Authorize, bah, AuthCallback)
         app.Resource("/tweets", TweetsResource{})
         app.Resource("/all_tweets", AllTweetsResource{})
-
-        app.Resource("/likes", LikesResource{})
     }
 
     return app

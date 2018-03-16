@@ -26,9 +26,9 @@ type AllTweetsResource struct {
 
 // List gets all Tweets. This function is mapped to the path
 // GET /tweets
-func (v AllTweetsResource) List(c buffalo.Context) error {
+func (v AllTweetsResource) List(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -37,7 +37,7 @@ func (v AllTweetsResource) List(c buffalo.Context) error {
 
     // Paginate results. Params "page" and "per_page" control pagination.
     // Default values are "page=1" and "per_page=20".
-    q := tx.PaginateFromParams(c.Params())
+    q := tx.PaginateFromParams(ctx.Params())
 
     // Retrieve all Tweets from the DB
     if err := q.All(tweets); err != nil {
@@ -45,10 +45,10 @@ func (v AllTweetsResource) List(c buffalo.Context) error {
     }
 
     // Make Tweets available inside the html template
-    c.Set("tweets", tweets)
+    ctx.Set("tweets", tweets)
 
     // Add the paginator to the context so it can be used in the template.
-    c.Set("pagination", q.Paginator)
+    ctx.Set("pagination", q.Paginator)
 
-    return c.Render(200, r.HTML("tweets/list_all.html"))
+    return ctx.Render(200, r.HTML("tweets/list_all.html"))
 }
