@@ -26,9 +26,9 @@ type LikesResource struct {
 
 // List gets all Likes. This function is mapped to the path
 // GET /likes
-func (v LikesResource) List(c buffalo.Context) error {
+func (v LikesResource) List(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -37,7 +37,7 @@ func (v LikesResource) List(c buffalo.Context) error {
 
     // Paginate results. Params "page" and "per_page" control pagination.
     // Default values are "page=1" and "per_page=20".
-    q := tx.PaginateFromParams(c.Params())
+    q := tx.PaginateFromParams(ctx.Params())
 
     // Retrieve all Likes from the DB
     if err := q.All(likes); err != nil {
@@ -45,19 +45,19 @@ func (v LikesResource) List(c buffalo.Context) error {
     }
 
     // Make Likes available inside the html template
-    c.Set("likes", likes)
+    ctx.Set("likes", likes)
 
     // Add the paginator to the context so it can be used in the template.
-    c.Set("pagination", q.Paginator)
+    ctx.Set("pagination", q.Paginator)
 
-    return c.Render(200, r.HTML("likes/index.html"))
+    return ctx.Render(200, r.HTML("likes/index.html"))
 }
 
 // Show gets the data for one Like. This function is mapped to
 // the path GET /likes/{like_id}
-func (v LikesResource) Show(c buffalo.Context) error {
+func (v LikesResource) Show(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -66,29 +66,29 @@ func (v LikesResource) Show(c buffalo.Context) error {
     like := &models.Like{}
 
     // To find the Like the parameter like_id is used.
-    if err := tx.Find(like, c.Param("like_id")); err != nil {
-        return c.Error(404, err)
+    if err := tx.Find(like, ctx.Param("like_id")); err != nil {
+        return ctx.Error(404, err)
     }
 
     // Make like available inside the html template
-    c.Set("like", like)
+    ctx.Set("like", like)
 
-    return c.Render(200, r.HTML("likes/show.html"))
+    return ctx.Render(200, r.HTML("likes/show.html"))
 }
 
 // Create adds a Like to the DB. This function is mapped to the
 // path POST /likes
-func (v LikesResource) Create(c buffalo.Context) error {
+func (v LikesResource) Create(ctx buffalo.Context) error {
     // Allocate an empty Like
     like := &models.Like{}
 
     // Bind like to the html form elements
-    if err := c.Bind(like); err != nil {
+    if err := ctx.Bind(like); err != nil {
         return errors.WithStack(err)
     }
 
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -101,28 +101,28 @@ func (v LikesResource) Create(c buffalo.Context) error {
 
     if verrs.HasAny() {
         // Make like available inside the html template
-        c.Set("like", like)
+        ctx.Set("like", like)
 
         // Make the errors available inside the html template
-        c.Set("errors", verrs)
+        ctx.Set("errors", verrs)
 
         // Render again the new.html template that the user can
         // correct the input.
-        return c.Render(422, r.HTML("likes/new.html"))
+        return ctx.Render(422, r.HTML("likes/new.html"))
     }
 
     // If there are no errors set a success message
-    //c.Flash().Add("success", "Like was created successfully")
+    //ctx.Flash().Add("success", "Like was created successfully")
 
     // and redirect to the same All Tweets page
-    return c.Redirect(302, "/all_tweets")
+    return ctx.Redirect(302, "/all_tweets")
 }
 
 // Edit renders a edit form for a Like. This function is
 // mapped to the path GET /likes/{like_id}/edit
-func (v LikesResource) Edit(c buffalo.Context) error {
+func (v LikesResource) Edit(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -130,20 +130,20 @@ func (v LikesResource) Edit(c buffalo.Context) error {
     // Allocate an empty Like
     like := &models.Like{}
 
-    if err := tx.Find(like, c.Param("like_id")); err != nil {
-        return c.Error(404, err)
+    if err := tx.Find(like, ctx.Param("like_id")); err != nil {
+        return ctx.Error(404, err)
     }
 
     // Make like available inside the html template
-    c.Set("like", like)
-    return c.Render(200, r.HTML("likes/edit.html"))
+    ctx.Set("like", like)
+    return ctx.Render(200, r.HTML("likes/edit.html"))
 }
 
 // Update changes a Like in the DB. This function is mapped to
 // the path PUT /likes/{like_id}
-func (v LikesResource) Update(c buffalo.Context) error {
+func (v LikesResource) Update(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -151,12 +151,12 @@ func (v LikesResource) Update(c buffalo.Context) error {
     // Allocate an empty Like
     like := &models.Like{}
 
-    if err := tx.Find(like, c.Param("like_id")); err != nil {
-        return c.Error(404, err)
+    if err := tx.Find(like, ctx.Param("like_id")); err != nil {
+        return ctx.Error(404, err)
     }
 
     // Bind Like to the html form elements
-    if err := c.Bind(like); err != nil {
+    if err := ctx.Bind(like); err != nil {
         return errors.WithStack(err)
     }
 
@@ -167,28 +167,28 @@ func (v LikesResource) Update(c buffalo.Context) error {
 
     if verrs.HasAny() {
         // Make like available inside the html template
-        c.Set("like", like)
+        ctx.Set("like", like)
 
         // Make the errors available inside the html template
-        c.Set("errors", verrs)
+        ctx.Set("errors", verrs)
 
         // Render again the edit.html template that the user can
         // correct the input.
-        return c.Render(422, r.HTML("likes/edit.html"))
+        return ctx.Render(422, r.HTML("likes/edit.html"))
     }
 
     // If there are no errors set a success message
-    c.Flash().Add("success", "Like was updated successfully")
+    ctx.Flash().Add("success", "Like was updated successfully")
 
     // and redirect to the likes index page
-    return c.Redirect(302, "/likes/%s", like.ID)
+    return ctx.Redirect(302, "/likes/%s", like.ID)
 }
 
 // Destroy deletes a Like from the DB. This function is mapped
 // to the path DELETE /likes/{like_id}
-func (v LikesResource) Destroy(c buffalo.Context) error {
+func (v LikesResource) Destroy(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -197,8 +197,8 @@ func (v LikesResource) Destroy(c buffalo.Context) error {
     like := &models.Like{}
 
     // To find the Like the parameter like_id is used.
-    if err := tx.Find(like, c.Param("like_id")); err != nil {
-        return c.Error(404, err)
+    if err := tx.Find(like, ctx.Param("like_id")); err != nil {
+        return ctx.Error(404, err)
     }
 
     if err := tx.Destroy(like); err != nil {
@@ -206,8 +206,8 @@ func (v LikesResource) Destroy(c buffalo.Context) error {
     }
 
     // If there are no errors set a flash message
-    c.Flash().Add("success", "Like was destroyed successfully")
+    ctx.Flash().Add("success", "Like was destroyed successfully")
 
     // Redirect to the likes index page
-    return c.Redirect(302, "/likes")
+    return ctx.Redirect(302, "/likes")
 }
