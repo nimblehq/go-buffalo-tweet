@@ -13,8 +13,9 @@ type WordCensorship struct {
     Field string
 }
 
-func (v *WordCensorship) IsValid(errors *validate.Errors) {
-    if strings.Contains(strings.TrimSpace(v.Field), "fuck") {
-        errors.Add(validators.GenerateKey(v.Name), fmt.Sprintf("You shouldn't say '%s' ", "fuck"))
+func (holder *WordCensorship) IsValid(errors *validate.Errors) {
+    var censortWord = "fuck"
+    if strings.Contains(strings.TrimSpace(holder.Field), censortWord) {
+        errors.Add(validators.GenerateKey(holder.Name), fmt.Sprintf("You shouldn't say '%s' ", censortWord))
     }
 }
