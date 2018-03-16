@@ -2,7 +2,7 @@ package actions
 
 import (
     "github.com/bufftwitt/models"
-    "github.com/markbates/pop/nulls"
+    "github.com/gobuffalo/pop/nulls"
 )
 
 func (as *ActionSuite) Test_TweetsResource_List() {

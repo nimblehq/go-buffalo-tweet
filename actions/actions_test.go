@@ -5,7 +5,7 @@ import (
 
     "github.com/bufftwitt/models"
     "github.com/gobuffalo/suite"
-    "github.com/markbates/pop/nulls"
+    "github.com/gobuffalo/pop/nulls"
 )
 
 type ActionSuite struct {

@@ -4,8 +4,8 @@ import (
     "fmt"
     "strings"
 
-    "github.com/markbates/validate"
-    "github.com/markbates/validate/validators"
+    "github.com/gobuffalo/validate"
+    "github.com/gobuffalo/validate/validators"
 )
 
 type WordCensorship struct {

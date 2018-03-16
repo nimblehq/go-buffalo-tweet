@@ -9,8 +9,8 @@ import (
     "github.com/markbates/goth"
     "github.com/markbates/goth/gothic"
     "github.com/markbates/goth/providers/github"
-    "github.com/markbates/pop"
-    "github.com/markbates/pop/nulls"
+    "github.com/gobuffalo/pop"
+    "github.com/gobuffalo/pop/nulls"
     "github.com/pkg/errors"
 )
 

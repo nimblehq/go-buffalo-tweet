@@ -5,10 +5,10 @@ import (
     "time"
 
     validators2 "github.com/bufftwitt/models/validators"
-    "github.com/markbates/pop"
-    "github.com/markbates/validate"
-    "github.com/markbates/validate/validators"
-    "github.com/satori/go.uuid"
+    "github.com/gobuffalo/pop"
+    "github.com/gobuffalo/validate"
+    "github.com/gobuffalo/validate/validators"
+    "github.com/gobuffalo/uuid"
 )
 
 type Tweet struct {

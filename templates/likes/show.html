@@ -4,13 +4,6 @@
 
 <ul class="list-unstyled list-inline">
   <li><a href="<%= likesPath() %>" class="btn btn-info">Back to all Likes</a></li>
-  <li><a href="<%= editLikePath({ like_id: like.ID })%>" class="btn btn-warning">Edit</a></li>
-  <li><a href="<%= likePath({ like_id: like.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+  <li><a href="<%= likePath({ like_id: like.ID })%>" data-method="DELETE" class="btn btn-danger">Unlike</a>
 </ul>
 
-<p>
-  <strong>UserID</strong>: <%= like.UserID %>
-</p>
-<p>
-  <strong>TweetID</strong>: <%= like.TweetID %>
-</p>

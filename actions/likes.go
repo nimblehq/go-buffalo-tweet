@@ -3,7 +3,7 @@ package actions
 import (
     "github.com/bufftwitt/models"
     "github.com/gobuffalo/buffalo"
-    "github.com/markbates/pop"
+    "github.com/gobuffalo/pop"
     "github.com/pkg/errors"
 )
 
@@ -24,15 +24,61 @@ type LikesResource struct {
     buffalo.Resource
 }
 
-// Create adds a Like to the DB. This function is mapped to the
-// path POST /likes
-func (v LikesResource) Create(ctx buffalo.Context) error {
+// List gets all Likes. This function is mapped to the path
+// GET /likes
+func (v LikesResource) List(ctx buffalo.Context) error {
+    // Get the DB connection from the context
     tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
 
-    currentUser := ctx.Value("current_user").(*models.User)
+    likes := &models.Likes{}
+
+    // Paginate results. Params "page" and "per_page" control pagination.
+    // Default values are "page=1" and "per_page=20".
+    q := tx.PaginateFromParams(ctx.Params())
+
+    // Retrieve all Likes from the DB
+    if err := q.All(likes); err != nil {
+        return errors.WithStack(err)
+    }
+
+    // Make Likes available inside the html template
+    ctx.Set("likes", likes)
+
+    // Add the paginator to the context so it can be used in the template.
+    ctx.Set("pagination", q.Paginator)
+
+    return ctx.Render(200, r.HTML("likes/index.html"))
+}
+
+// Show gets the data for one Like. This function is mapped to
+// the path GET /likes/{like_id}
+func (v LikesResource) Show(ctx buffalo.Context) error {
+    // Get the DB connection from the context
+    tx, ok := ctx.Value("tx").(*pop.Connection)
+    if !ok {
+        return errors.WithStack(errors.New("no transaction found"))
+    }
+
+    // Allocate an empty Like
+    like := &models.Like{}
+
+    // To find the Like the parameter like_id is used.
+    if err := tx.Find(like, ctx.Param("like_id")); err != nil {
+        return ctx.Error(404, err)
+    }
+
+    // Make like available inside the html template
+    ctx.Set("like", like)
+
+    return ctx.Render(200, r.HTML("likes/show.html"))
+}
+
+// Create adds a Like to the DB. This function is mapped to the
+// path POST /likes
+func (v LikesResource) Create(ctx buffalo.Context) error {
     // Allocate an empty Like
     like := &models.Like{}
 
@@ -41,10 +87,8 @@ func (v LikesResource) Create(ctx buffalo.Context) error {
         return errors.WithStack(err)
     }
 
-    like.UserID = currentUser.ID
-
     // Get the DB connection from the context
-    tx, ok = ctx.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -64,14 +108,14 @@ func (v LikesResource) Create(ctx buffalo.Context) error {
 
         // Render again the new.html template that the user can
         // correct the input.
-        return ctx.Render(422, r.HTML("tweets/list_all.html"))
+        return ctx.Render(422, r.HTML("likes/new.html"))
     }
 
     // If there are no errors set a success message
-    ctx.Flash().Add("success", "Like was created successfully")
+    //ctx.Flash().Add("success", "Like was created successfully")
 
-    // and redirect to the likes index page
-    return ctx.Redirect(302, "/likes/%s", like.ID)
+    // and redirect to the same All Tweets page
+    return ctx.Redirect(302, "/all_tweets")
 }
 
 // Edit renders a edit form for a Like. This function is
