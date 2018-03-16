@@ -23,12 +23,12 @@ func init() {
     )
 }
 
-func AuthCallback(c buffalo.Context) error {
-    gu, err := gothic.CompleteUserAuth(c.Response(), c.Request())
+func AuthCallback(ctx buffalo.Context) error {
+    gu, err := gothic.CompleteUserAuth(ctx.Response(), ctx.Request())
     if err != nil {
-        return c.Error(401, err)
+        return ctx.Error(401, err)
     }
-    tx := c.Value("tx").(*pop.Connection)
+    tx := ctx.Value("tx").(*pop.Connection)
     q := tx.Where("provider = ? and provider_id = ?", gu.Provider, gu.UserID)
     exists, err := q.Exists("users")
     if err != nil {
@@ -48,13 +48,13 @@ func AuthCallback(c buffalo.Context) error {
         return errors.WithStack(err)
     }
 
-    c.Session().Set("current_user_id", u.ID)
-    if err = c.Session().Save(); err != nil {
+    ctx.Session().Set("current_user_id", u.ID)
+    if err = ctx.Session().Save(); err != nil {
         return errors.WithStack(err)
     }
 
-    c.Flash().Add("success", "You have been logged in")
-    return c.Redirect(302, "/tweets")
+    ctx.Flash().Add("success", "You have been logged in")
+    return ctx.Redirect(302, "/tweets")
 }
 
 func AuthDestroy(c buffalo.Context) error {

@@ -24,17 +24,17 @@ type TweetsResource struct {
     buffalo.Resource
 }
 
-func (v TweetsResource) scope(c buffalo.Context) *pop.Query {
-    tx, _ := c.Value("tx").(*pop.Connection)
-    currentUserId := c.Session().Get("current_user_id")
+func (v TweetsResource) scope(ctx buffalo.Context) *pop.Query {
+    tx, _ := ctx.Value("tx").(*pop.Connection)
+    currentUserId := ctx.Session().Get("current_user_id")
     return tx.Where("user_id = ?", currentUserId)
 }
 
 // List gets all Tweets. This function is mapped to the path
 // GET /tweets
-func (v TweetsResource) List(c buffalo.Context) error {
+func (v TweetsResource) List(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    _, ok := c.Value("tx").(*pop.Connection)
+    _, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -43,7 +43,7 @@ func (v TweetsResource) List(c buffalo.Context) error {
 
     // Paginate results. Params "page" and "per_page" control pagination.
     // Default values are "page=1" and "per_page=20".
-    q := v.scope(c).PaginateFromParams(c.Params())
+    q := v.scope(ctx).PaginateFromParams(ctx.Params())
 
     // Retrieve all Tweets from the DB
     if err := q.All(tweets); err != nil {
@@ -51,19 +51,19 @@ func (v TweetsResource) List(c buffalo.Context) error {
     }
 
     // Make Tweets available inside the html template
-    c.Set("tweets", tweets)
+    ctx.Set("tweets", tweets)
 
     // Add the paginator to the context so it can be used in the template.
-    c.Set("pagination", q.Paginator)
+    ctx.Set("pagination", q.Paginator)
 
-    return c.Render(200, r.HTML("tweets/index.html"))
+    return ctx.Render(200, r.HTML("tweets/index.html"))
 }
 
 // Show gets the data for one Tweet. This function is mapped to
 // the path GET /tweets/{tweet_id}
-func (v TweetsResource) Show(c buffalo.Context) error {
+func (v TweetsResource) Show(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -72,23 +72,23 @@ func (v TweetsResource) Show(c buffalo.Context) error {
     tweet := &models.Tweet{}
 
     // To find the Tweet the parameter tweet_id is used.
-    if err := tx.Find(tweet, c.Param("tweet_id")); err != nil {
-        return c.Error(404, err)
+    if err := tx.Find(tweet, ctx.Param("tweet_id")); err != nil {
+        return ctx.Error(404, err)
     }
 
     // Make tweet available inside the html template
-    c.Set("tweet", tweet)
+    ctx.Set("tweet", tweet)
 
-    return c.Render(200, r.HTML("tweets/show.html"))
+    return ctx.Render(200, r.HTML("tweets/show.html"))
 }
 
 // New renders the form for creating a new Tweet.
 // This function is mapped to the path GET /tweets/new
-func (v TweetsResource) New(c buffalo.Context) error {
+func (v TweetsResource) New(ctx buffalo.Context) error {
     // Make tweet available inside the html template
-    c.Set("tweet", &models.Tweet{})
+    ctx.Set("tweet", &models.Tweet{})
 
-    return c.Render(200, r.HTML("tweets/new.html"))
+    return ctx.Render(200, r.HTML("tweets/new.html"))
 }
 
 // Create adds a Tweet to the DB. This function is mapped to the
@@ -141,9 +141,9 @@ func (v TweetsResource) Create(c buffalo.Context) error {
 
 // Edit renders a edit form for a Tweet. This function is
 // mapped to the path GET /tweets/{tweet_id}/edit
-func (v TweetsResource) Edit(c buffalo.Context) error {
+func (v TweetsResource) Edit(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -151,20 +151,20 @@ func (v TweetsResource) Edit(c buffalo.Context) error {
     // Allocate an empty Tweet
     tweet := &models.Tweet{}
 
-    if err := tx.Find(tweet, c.Param("tweet_id")); err != nil {
-        return c.Error(404, err)
+    if err := tx.Find(tweet, ctx.Param("tweet_id")); err != nil {
+        return ctx.Error(404, err)
     }
 
     // Make tweet available inside the html template
-    c.Set("tweet", tweet)
-    return c.Render(200, r.HTML("tweets/edit.html"))
+    ctx.Set("tweet", tweet)
+    return ctx.Render(200, r.HTML("tweets/edit.html"))
 }
 
 // Update changes a Tweet in the DB. This function is mapped to
 // the path PUT /tweets/{tweet_id}
-func (v TweetsResource) Update(c buffalo.Context) error {
+func (v TweetsResource) Update(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -172,12 +172,12 @@ func (v TweetsResource) Update(c buffalo.Context) error {
     // Allocate an empty Tweet
     tweet := &models.Tweet{}
 
-    if err := tx.Find(tweet, c.Param("tweet_id")); err != nil {
-        return c.Error(404, err)
+    if err := tx.Find(tweet, ctx.Param("tweet_id")); err != nil {
+        return ctx.Error(404, err)
     }
 
     // Bind Tweet to the html form elements
-    if err := c.Bind(tweet); err != nil {
+    if err := ctx.Bind(tweet); err != nil {
         return errors.WithStack(err)
     }
 
@@ -188,28 +188,28 @@ func (v TweetsResource) Update(c buffalo.Context) error {
 
     if verrs.HasAny() {
         // Make tweet available inside the html template
-        c.Set("tweet", tweet)
+        ctx.Set("tweet", tweet)
 
         // Make the errors available inside the html template
-        c.Set("errors", verrs)
+        ctx.Set("errors", verrs)
 
         // Render again the edit.html template that the user can
         // correct the input.
-        return c.Render(422, r.HTML("tweets/edit.html"))
+        return ctx.Render(422, r.HTML("tweets/edit.html"))
     }
 
     // If there are no errors set a success message
-    c.Flash().Add("success", "Tweet was updated successfully")
+    ctx.Flash().Add("success", "Tweet was updated successfully")
 
     // and redirect to the tweets index page
-    return c.Redirect(302, "/tweets/%s", tweet.ID)
+    return ctx.Redirect(302, "/tweets/%s", tweet.ID)
 }
 
 // Destroy deletes a Tweet from the DB. This function is mapped
 // to the path DELETE /tweets/{tweet_id}
-func (v TweetsResource) Destroy(c buffalo.Context) error {
+func (v TweetsResource) Destroy(ctx buffalo.Context) error {
     // Get the DB connection from the context
-    tx, ok := c.Value("tx").(*pop.Connection)
+    tx, ok := ctx.Value("tx").(*pop.Connection)
     if !ok {
         return errors.WithStack(errors.New("no transaction found"))
     }
@@ -218,8 +218,8 @@ func (v TweetsResource) Destroy(c buffalo.Context) error {
     tweet := &models.Tweet{}
 
     // To find the Tweet the parameter tweet_id is used.
-    if err := tx.Find(tweet, c.Param("tweet_id")); err != nil {
-        return c.Error(404, err)
+    if err := tx.Find(tweet, ctx.Param("tweet_id")); err != nil {
+        return ctx.Error(404, err)
     }
 
     if err := tx.Destroy(tweet); err != nil {
@@ -227,8 +227,8 @@ func (v TweetsResource) Destroy(c buffalo.Context) error {
     }
 
     // If there are no errors set a flash message
-    c.Flash().Add("success", "Tweet was destroyed successfully")
+    ctx.Flash().Add("success", "Tweet was destroyed successfully")
 
     // Redirect to the tweets index page
-    return c.Redirect(302, "/tweets")
+    return ctx.Redirect(302, "/tweets")
 }
