@@ -22,7 +22,11 @@
     <td><%= tweet.LikeCount %></td>
     <td>
       <div class="pull-right">
-        <a href="<%= tweetPath({ tweet_id: tweet.ID }) %>" class="btn btn-primary">Like</a>
+        <%= form_for(tweet, {action: likesPath(), method: "POST"}) { %>
+            <input name="TweetID" value="<%=tweet.ID%>" hidden="true"/>
+            <input name="UserID" value="<%=tweet.UserID%>" hidden="true"/>
+            <button class="btn btn-primary" role="submit">Like</button>
+        <% } %>
       </div>
     </td>
   </tr>

@@ -4,4 +4,5 @@
 
 <%= form_for(like, {action: likesPath(), method: "POST"}) { %>
   <%= partial("likes/form.html") %>
+<a href="<%= likesPath() %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
 <% } %>

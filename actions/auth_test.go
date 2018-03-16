@@ -6,7 +6,7 @@ import (
     "github.com/bufftwitt/models"
     "github.com/markbates/goth"
     "github.com/markbates/goth/gothic"
-    "github.com/markbates/pop/nulls"
+    "github.com/gobuffalo/pop/nulls"
 )
 
 func (as *ActionSuite) Test_AuthCallback_NewUser() {
